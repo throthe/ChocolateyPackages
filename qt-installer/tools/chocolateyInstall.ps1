@@ -19,11 +19,6 @@ if ($pp["components"]) {
   echo "$pp['components']"
 }
 
-# Show GUI if user wants to check their component list
-if ($pp["check-components"]) {
-  $silentArgs = ""
-}
-
 echo "Was verbose: ${ENV:ChocolateyEnvironmentVerbose}"
 if (${ENV:ChocolateyEnvironmentVerbose}) {
   echo "Verbose enabled."
