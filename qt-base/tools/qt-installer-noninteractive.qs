@@ -1,8 +1,17 @@
+Mode = {}
+Mode.INSTALLER = 1
+Mode.UPDATER = 2
+Mode.UNINSTALLER = 3
+
 settings = {}
-settings.printAllComponents = false;
-settings.includePreview = false;
+settings.mode = Mode.INSTALLER;
+settings.componentsToAdd = [];
+settings.componentsToRemove = [];
 settings.installPath = null;
+settings.includePreview = false;
+settings.listComponents = false;
 settings.allPackageSources = ['Archive', 'LTS', 'Latest releases', 'Preview'];
+settings.allPackageSources = ['Latest releases'];
 
 LOG = {}
 LOG.DEBUG = 'debug';
@@ -12,40 +21,72 @@ LOG.ERROR = 'error';
 LOG.COMPONENT = 'component'
 LOG.log = function (msg, level) {
     level = level || LOG.DEBUG;
-    console.log('choco:' + level + ' - ' + msg);
+
+    prefix = 'choco:' + level;
+
+    if (level == LOG.ERROR) {
+        console.log(prefix);
+        console.log(prefix + ' --------------------------------------------------------------------------------------------');
+        console.log(prefix + ' - ERROR: ' + msg);
+    } else {
+        console.log(prefix + ' - ' + msg);
+    }
 }
 
 function Controller() {
 
     LOG.log('Loaded non-interactive install script.', LOG.INFO);
 
-    components = installer.value('components');
-    LOG.log('components=' + components, LOG.DEBUG);
-    if (!components || components.length == 0) {
-        LOG.log('No components were given. This will install only Qt Creator.', LOG.WARN);
-        LOG.log('To install components, use: choco install qt-installer --param "components=\'comp.1 comp.2\'', LOG.WARN);
+    LOG.log('isInstaller: ' + installer.isInstaller());
+    LOG.log('isUpdater: ' + installer.isUpdater());
+    LOG.log('isUninstaller: ' + installer.isUninstaller());
+
+    toInstall = installer.value('install');
+    toRemove = installer.value('remove');
+    LOG.log('install="' + toInstall + '"', LOG.DEBUG);
+    LOG.log('remove="' + toRemove + '"', LOG.DEBUG);
+
+    if (toInstall.length == 0 && toRemove.length == 0) {
+        LOG.log('No components were supplied. This will ONLY install Qt Creator.', LOG.WARN);
     }
 
-    installPath = installer.value('install_path');
+    if (toInstall && toInstall.length > 0) {
+        settings.componentsToAdd = toInstall.split(' ');
+    }
+
+    // Use full uninstaller mode if we're removing everything
+    if (toRemove == 'all') {
+        LOG.log('Performing complete uninstallation.', LOG.WARN);
+
+        settings.mode = Mode.UNINSTALLER;
+        toRemove = '';
+    }
+
+    if (toRemove && toRemove.length > 0) {
+        settings.componentsToRemove = toRemove.split(' ')
+    }
+
+    installPath = installer.value('installDir');
     if (installPath && installPath.length > 0) {
-        LOG.log('install_path=' + installPath, LOG.DEBUG);
+        LOG.log('installDir="' + installPath + '"', LOG.DEBUG);
         settings.installPath = installPath;
     }
 
-    printAllComponents = installer.value('print_component_list');
-    if (printAllComponents && printAllComponents.length > 0) {
-        LOG.log('print_component_list=' + printAllComponents, LOG.DEBUG);
-        settings.printAllComponents = true;
+    listComponents = installer.value('listComponents');
+    if (listComponents && listComponents.length > 0) {
+        LOG.log('listComponents=' + listComponents, LOG.DEBUG);
+        settings.listComponents = true;
     }
 
-    includePreview = installer.value('include_preview');
+    // Allow selecting components from the preview repository
+    includePreview = installer.value('includePreview');
     if (includePreview && includePreview.length > 0) {
         LOG.log('Allowing Qt component selection from source Preview.', LOG.INFO);
         settings.includePreview = true;
     }
 
-    // Default NO to all messages boxes with retry options
-    // We want to give up and fall back to Chocolatey
+    // Handle any message boxes
+    installer.autoRejectMessageBoxes()
     installer.setMessageBoxAutomaticAnswer('cancelInstallation', QMessageBox.Yes);
     installer.setMessageBoxAutomaticAnswer('installationError', QMessageBox.Ok);
     installer.setMessageBoxAutomaticAnswer('installationErrorWithRetry', QMessageBox.Cancel);
@@ -55,7 +96,6 @@ function Controller() {
     // installer.setMessageBoxAutomaticAnswer('archiveDownloadError', QMessageBox.Cancel);
     // installer.setMessageBoxAutomaticAnswer('stopProcessesForUpdates', QMessageBox.Cancel);
 
-    // Attach to lots of callbacks for debugging
     installer.componentAdded.connect(function(comp) {
         LOG.log('Success callback. Added: ' + comp.name + ' (' + comp.displayName + ')');
     });
@@ -66,15 +106,19 @@ function Controller() {
         LOG.log('updaterComponentsAdded: ' + x);
     });
 
-    installer.updateFinished.connect(function () {
+    installer.installationInterrupted.connect(function() {
+        LOG.log('Installation interrupted.', LOG.INFO);
+    });
+    installer.installationFinished.connect(function() {
+        LOG.log('Installation finished.', LOG.INFO);
+        gui.clickButton(buttons.NextButton);
+    });
+    installer.updateFinished.connect(function() {
         LOG.log('Update finished.', LOG.INFO);
         gui.clickButton(buttons.NextButton);
     });
-    installer.installationInterrupted.connect(function () {
-        LOG.log('Installation interrupted.');
-    });
-    installer.installationFinished.connect(function () {
-        LOG.log('Installation finished.', LOG.INFO);
+    installer.uninstallationFinished.connect(function() {
+        LOG.log('Uninstallation finished.', LOG.INFO);
         gui.clickButton(buttons.NextButton);
     });
 
@@ -100,10 +144,63 @@ Controller.prototype.WelcomePageCallback = function() {
 Controller.prototype.CredentialsPageCallback = function() {
     LOG.log('Reached credentials page.', LOG.DEBUG);
 
-    // Clear credentials
-    gui.currentPageWidget().loginWidget.EmailLineEdit.setText('');
-    gui.currentPageWidget().loginWidget.PasswordLineEdit.setText('');
-    LOG.log('Reset credential information.', LOG.INFO);
+    var credentialError = function(errrorName) {
+        LOG.log('Qt account login failed with "' + errrorName + '" error.', LOG.ERROR);
+        gui.reject();
+    }
+
+    login = installer.environmentVariable('QT_LOGIN');
+    password = installer.environmentVariable('QT_PASSWORD');
+
+    if (login.length > 0 && password.length > 0) {
+        LOG.log('Using credentials for ' + login + '.', LOG.INFO);
+    } else {
+        // Require both to even try
+        login = '';
+        password = '';
+        LOG.log('Resetting credential information.', LOG.INFO);
+    }
+
+    page = gui.currentPageWidget();
+
+    gui.findChild(page, 'EmailLineEdit').setText(login);
+    gui.findChild(page, 'PasswordLineEdit').setText(password);
+
+    // Next button will be disabled if credential format was invalid
+    if (!gui.isButtonEnabled(buttons.NextButton)) {
+        credentialError('Invalid login or password format');
+        return;
+    }
+
+    // Handle credential errors
+    page.loginErrorQtAccountChangeDetected.connect(function() {
+        credentialError('loginErrorQtAccountChangeDetected');
+        return;
+    });
+    page.licenseDownloadError.connect(function() {
+        credentialError('licenseDownloadError');
+        return;
+    });
+    page.allLicensesExpired.connect(function() {
+        credentialError('allLicensesExpired');
+        return;
+    });
+    page.noValidLicenseForThisHost.connect(function() {
+        credentialError('noValidLicenseForThisHost');
+        return;
+    });
+    page.emailNotVerified.connect(function() {
+        credentialError('emailNotVerified');
+        return;
+    });
+    page.credentialsPageCompleted.connect(function() {
+        credentialError('credentialsPageCompleted');
+        return;
+    });
+    page.licensemanagerError.connect(function() {
+        credentialError('licensemanagerError');
+        return;
+    });
 
     gui.clickButton(buttons.NextButton);
 
@@ -112,6 +209,16 @@ Controller.prototype.CredentialsPageCallback = function() {
 
 Controller.prototype.IntroductionPageCallback = function() {
     LOG.log('Reached introduction page.', LOG.DEBUG);
+
+    page = gui.currentPageWidget()
+
+    // Only do uninstall if we're uninstalling everything
+    // Don't select a radio button if this is the first time install
+    if (settings.mode == Mode.UNINSTALLER) {
+        gui.findChild(page, 'UninstallerRadioButton').click();
+    } else if (settings.mode == Mode.UPDATER) {
+        gui.findChild(page, 'PackageManagerRadioButton').click();
+    }
 
     gui.clickButton(buttons.NextButton);
 
@@ -156,8 +263,8 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
         // }
 
         var needsRefresh = false;
-        for (var i = 0; i < settings.packageSources.length; i++) {
-            source = settings.packageSources[i]
+        for (var i = 0; i < settings.allPackageSources.length; i++) {
+            source = settings.allPackageSources[i]
             checkBox = categoryBox[source]
 
             // Skip preview features
@@ -181,19 +288,19 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
             }
         }
 
+        // Refreshing requires fetching new metadata
         // Don't refresh unless we have to
-        // Requires fetching new metadata
         if (needsRefresh) {
             var fetchButton = categoryBox.FetchCategoryButton
             if (fetchButton) {
                 LOG.log('Refreshing component sources...', LOG.INFO);
                 fetchButton.click();
             } else {
-                LOG.log('Could not find fetch button. All component sources may not be enabled.', LOG.ERROR);
+                LOG.log('Could not find fetch button. All component sources may not be enabled.', LOG.WARN);
             }
         }
     } else {
-        LOG.log('Could not find group box. All component sources may not be enabled.', LOG.ERROR);
+        LOG.log('Could not find group box. All component sources may not be enabled.', LOG.WARN);
     }
 
     // Create a dictionary of all the component names
@@ -201,34 +308,55 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
     allComponents = {}
     for (var i = 0; i < allComponentsList.length; i++) {
         comp = allComponentsList[i];
-        allComponents[comp.name] = comp.displayName;
+        allComponents[comp.name] = comp;
 
-        if (settings.printAllComponents) {
+        if (settings.listComponents) {
             LOG.log(comp.displayName + ' = ' + comp.name, LOG.COMPONENT);
         }
     }
 
     // Exit after printing the component list
-    if (settings.printAllComponents) {
+    if (settings.listComponents) {
         gui.reject();
         return;
     }
 
     page.deselectAll();
 
-    userComponents = installer.value('components');
-    userComponents = userComponents.split(' ');
+    for (var i = 0; i < settings.componentsToAdd.length; i++) {
+        compName = settings.componentsToAdd[i].trim();
 
-    for (var i = 0; i < userComponents.length; i++) {
-        comp = userComponents[i].trim();
+        if (compName in allComponents) {
+            comp = allComponents[compName]
 
-        if (comp in allComponents) {
-            page.selectComponent(comp);
-            LOG.log('Selected: ' + comp, LOG.INFO);
+            LOG.log(comp.installed)
+            LOG.log(comp.isInstalled())
+            LOG.log(comp.installationRequested())
+
+            page.selectComponent(compName);
+            LOG.log('Selected: ' + compName, LOG.INFO);
         } else {
-            LOG.log('', LOG.ERROR);
-            LOG.log('--------------------------------------------------------------------------------------------', LOG.ERROR);
-            LOG.log('   ERROR: Could not find ' + comp + ' in the Qt component list.', LOG.ERROR);
+            LOG.log('Could not find ' + compName + ' in the Qt component list.', LOG.ERROR);
+
+            gui.reject();
+            return;
+        }
+    }
+
+    for (var i = 0; i < settings.componentsToRemove.length; i++) {
+        compName = settings.componentsToRemove[i].trim();
+
+        if (compName in allComponents) {
+            comp = allComponents[compName]
+
+            LOG.log(comp.installed)
+            LOG.log(comp.isInstalled())
+            LOG.log(comp.installationRequested())
+
+            page.deselectComponent(compName);
+            LOG.log('Deselected: ' + compName, LOG.INFO);
+        } else {
+            LOG.log('Could not find ' + compName + ' in the Qt component list.', LOG.ERROR);
 
             gui.reject();
             return;
@@ -264,7 +392,8 @@ Controller.prototype.ReadyForInstallationPageCallback = function() {
 
     bytes = installer.requiredDiskSpace();
     gigaBytes = bytes / 1024.0 / 1024.0 / 1024.0;
-    LOG.log('Install will require ' + gigaBytes + ' GB of disk space.', LOG.WARN);
+    gigaBytes = Math.round(gigaBytes * 100) / 100.0
+    LOG.log('Changes will require ' + gigaBytes + ' GB of disk space.', LOG.WARN);
 
     gui.clickButton(buttons.NextButton);
 
@@ -274,19 +403,18 @@ Controller.prototype.ReadyForInstallationPageCallback = function() {
 Controller.prototype.PerformInstallationPageCallback = function() {
     LOG.log('Reached perform installation page.', LOG.DEBUG);
 
-    LOG.log('Starting download and installation. This may take awhile...', LOG.WARN);
+    if (settings.mode == Mode.UNINSTALLER) {
+        LOG.log('Starting uninstall...', LOG.INFO);
+    } else {
+        LOG.log('Starting download and installation. This may take awhile...', LOG.WARN);
+    }
 
     var page = gui.currentPageWidget();
-
-    // Can't figure out a good way to get information out of these as they are updated
-    // var progressLabel = page.ProgressLabel;
-    // var downloadStatus = page.DownloadStatus;
-    // var detailBrowser = page.DetailsBrowser.plainText;
 
     var progressBar = page.ProgressBar
     progressBar.valueChanged.connect(function(value) {
         if (value % 5 == 0) {
-            LOG.log('Installation progress: ' + value + '%', LOG.INFO);
+            LOG.log('Progress: ' + value + '%', LOG.INFO);
         }
     });
 
