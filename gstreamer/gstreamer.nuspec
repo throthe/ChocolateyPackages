@@ -24,6 +24,8 @@ GStreamer is a pipeline-based multimedia framework that links together a wide va
 Applications can take advantage of advances in codec and filter technology transparently. Developers can add new codecs and filters by writing a simple plugin with a clean, generic interface.
 
 GStreamer is free and open-source software subject to the terms of the GNU Lesser General Public License (LGPL).
+
+Versioning is done in the MAJOR.MINOR.MICRO format with even MINOR numbers indicating stable releases, and odd MINOR numbers indicating unstable development releases [[source](https://gitlab.freedesktop.org/gstreamer/gst-docs/blob/master/markdown/frequently-asked-questions/developing.md#what-kind-of-versioning-scheme-does-gstreamer-use)].
     </description>
 
     <dependencies></dependencies>
