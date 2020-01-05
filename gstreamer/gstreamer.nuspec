@@ -17,7 +17,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>https://gstreamer.freedesktop.org/releases</releaseNotes>
 
-    <summary>A pipeline-based multimedia framework for recording, streaming, and editing</summary>
+    <summary>A pipeline-based multimedia framework for recording, streaming, and editing.</summary>
     <description>
 GStreamer is a pipeline-based multimedia framework that links together a wide variety of media processing systems to complete complex workflows. The applications it supports range from simple Ogg/Vorbis playback, audio/video streaming to complex audio (mixing) and video (non-linear editing) processing.
 

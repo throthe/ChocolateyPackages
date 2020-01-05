@@ -1,8 +1,5 @@
 ﻿$ErrorActionPreference = 'Stop';
 
-$version        = ${ENV:ChocolateyPackageVersion}.Split('.')
-$major          = ${version}[0]
-$minor          = ${version}[1]
 $packageName    = "${ENV:ChocolateyPackageName}"
 $packageTitle   = "${ENV:ChocolateyPackageTitle}"
 $url64          = "https://gstreamer.freedesktop.org/data/pkg/windows/${ENV:ChocolateyPackageVersion}/gstreamer-1.0-msvc-x86_64-${ENV:ChocolateyPackageVersion}.msi"
@@ -22,5 +19,10 @@ $packageArgs = @{
 Install-ChocolateyPackage @packageArgs
 
 Write-Output ""
-Install-ChocolateyPath -PathToInstall "%GSTREAMER_1_0_ROOT_X86_64%\bin" -PathType "User"
-$ENV:Path = "${ENV:PATH};%GSTREAMER_1_0_ROOT_X86_64%\bin"
+
+# Must install to User path since we need to expand a User environment variable
+if (${ENV:OS_IS64BIT} -And -Not ${ENV:ChocolateyForceX86}) {
+  Install-ChocolateyPath -PathToInstall "%GSTREAMER_1_0_ROOT_X86_64%\bin" -PathType "User"
+} else {
+  Install-ChocolateyPath -PathToInstall "%GSTREAMER_1_0_ROOT_X86%\bin" -PathType "User"
+}
