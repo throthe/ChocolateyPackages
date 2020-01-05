@@ -15,7 +15,7 @@
     <tags>audio video recording streaming codec</tags>
     <licenseUrl>https://gitlab.freedesktop.org/gstreamer/gstreamer/blob/master/COPYING</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>https://gstreamer.freedesktop.org/releases</releaseNotes>
+    <releaseNotes>https://gstreamer.freedesktop.org/releases/1.16/#1.16.1</releaseNotes>
 
     <summary>A pipeline-based multimedia framework for recording, streaming, and editing.</summary>
     <description>
