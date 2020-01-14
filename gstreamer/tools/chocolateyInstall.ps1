@@ -1,9 +1,16 @@
 ﻿$ErrorActionPreference = 'Stop';
 
+# Strip package YYYYMMDD postfix if present
+$versionSplit   = ${ENV:ChocolateyPackageVersion}.Split('.')
+$major          = ${versionSplit}[0]
+$minor          = ${versionSplit}[1]
+$revision       = ${versionSplit}[2]
+$version        = "${major}.${minor}.${revision}"
+
 $packageName    = "${ENV:ChocolateyPackageName}"
 $packageTitle   = "${ENV:ChocolateyPackageTitle}"
-$url64          = "https://gstreamer.freedesktop.org/data/pkg/windows/${ENV:ChocolateyPackageVersion}/gstreamer-1.0-msvc-x86_64-${ENV:ChocolateyPackageVersion}.msi"
-$silentArgs     = "/qn /norestart /l*v `"$(${ENV:TEMP})\$(${packageName}).$(${ENV:chocolateyPackageVersion}).MsiInstall.log`""
+$url64          = "https://gstreamer.freedesktop.org/data/pkg/windows/${version}/gstreamer-1.0-msvc-x86_64-${version}.msi"
+$silentArgs     = "/qn /norestart /l*v `"$(${ENV:TEMP})\$(${packageName}).$(${version}).MsiInstall.log`""
 
 $packageArgs = @{
   packageName     = "${packageName}"
