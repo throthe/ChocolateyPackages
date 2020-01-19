@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
-    <id>qt-base</id>
-    <title>Qt Required Components</title>
+    <id>qt-installer</id>
+    <title>Qt Installer</title>
     <version>3.1.1</version>
-    <authors>The Qt Company Ltd</authors>
-    <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/master/qt-base</packageSourceUrl>
+    <authors>The Qt Company Ltd.</authors>
+    <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/master/qt-installer</packageSourceUrl>
     <projectUrl>https://www.qt.io/</projectUrl>
-    <iconUrl>https://upload.wikimedia.org/wikipedia/commons/0/0b/Qt_logo_2016.svg</iconUrl>
-    <bugTrackerUrl>https://bugreports.qt.io/projects/QTBUG/issues</bugTrackerUrl>
+    <iconUrl>https://rawcdn.githack.com/jmcker/ChocolateyPackages/72da9841805c0f484b3cb169ea89da96deb8ff6b/icons/qt.png</iconUrl>
+    <bugTrackerUrl>https://bugreports.qt.io/projects/QTIFW/issues</bugTrackerUrl>
     <mailingListUrl>https://lists.qt-project.org</mailingListUrl>
-    <projectSourceUrl>https://github.com/qt</projectSourceUrl>
+    <projectSourceUrl>https://code.qt.io/cgit/installer-framework/installer-framework.git/</projectSourceUrl>
     <tags>qt qt5 gui cross-platform</tags>
-    <licenseUrl>https://www.qt.io/licensing/</licenseUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <releaseNotes>https://wiki.qt.io/Template:Release_Information</releaseNotes>
+    <licenseUrl>https://code.qt.io/cgit/installer-framework/installer-framework.git/tree/LICENSE.GPL3-EXCEPT</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>https://code.qt.io/cgit/installer-framework/installer-framework.git/tree/Changelog</releaseNotes>
 
-    <summary>Install the minimum required Qt components.</summary>
+    <summary>Unified Installer for Qt</summary>
     <description>
-This package should not typically be installed on its own.
-It is intended to be included as a dependency on other packages that actually install Qt components.
+Uses the Qt Unified Installer to prepare for the installation of additional Qt components.
 
-Uses the Qt Unified Installer to prepare for the installation of additional Qt packages.
-This will install Qt Creator and setup the Qt Maintenance Tool.
-
-Valid options for the installer are:
+Valid options for the installer script are:
 
 - `/installDir:install_path` - AVOID SPACES IN THE PATH. Does not need to exist, but should be empty if it does. The entire directory will be removed on uninstall.
 
 Options are passed using the `--params` option during `choco install`:
 
 ```powershell
-choco install qt-base --params "/installDir:C:\Qt"
+choco install qt-installer --params "/installDir:C:\Qt"
 ```
+
+Qt is a registered trademark of The Qt Company Ltd. and its subsidiaries. The Qt Company Ltd. does not endorse or sponsor this package in any way. All use of the Qt name and logo have been made in attempt to comply with the [Fair Use Guidelines](https://www.qt.io/trademark/).
     </description>
 
     <dependencies></dependencies>
