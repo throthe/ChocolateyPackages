@@ -1,12 +1,16 @@
 ﻿$ErrorActionPreference = 'Stop';
 
-$v              = ${ENV:ChocolateyPackageVersion}.Split('.')
-$maj            = ${v}[0]
-$min            = ${v}[1]
+# Strip package YYYYMMDD postfix if present
+$versionSplit   = ${ENV:ChocolateyPackageVersion}.Split('.')
+$major          = ${versionSplit}[0]
+$minor          = ${versionSplit}[1]
+$revision       = ${versionSplit}[2]
+$version        = "${major}.${minor}.${revision}"
+
 $packageName    = "${ENV:ChocolateyPackageName}"
 $packageTitle   = "${ENV:ChocolateyPackageTitle}"
 $toolsDir       = "$(Split-Path -Parent $MyInvocation.MyCommand.Definition)"
-$url            = "https://qt.mirror.constant.com/archive/online_installers/${maj}.${min}/qt-unified-windows-x86-${ENV:ChocolateyPackageVersion}-online.exe"
+$url            = "http://qt.mirror.constant.com/archive/online_installers/${major}.${minor}/qt-unified-windows-x86-${version}-online.exe"
 $silentArgs     = ""      # Does not work: "--platform minimal"
 $installArgs    = "-v --script ${toolsDir}/qt-installer-noninteractive.qs"
 

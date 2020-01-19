@@ -10,6 +10,7 @@ settings.componentsToRemove = [];
 settings.installPath = null;
 settings.includePreview = false;
 settings.listComponents = false;
+settings.enableTelemetry = false;
 settings.allPackageSources = ['Archive', 'LTS', 'Latest releases', 'Preview'];
 settings.allPackageSources = ['Latest releases'];
 
@@ -72,17 +73,23 @@ function Controller() {
         settings.installPath = installPath;
     }
 
+    // Allow selecting components from the preview repository
+    includePreview = installer.value('includePreview');
+    if (includePreview && includePreview.length > 0) {
+        LOG.log('Allowing Qt component selection from source Preview.', LOG.INFO);
+        settings.includePreview = true;
+    }
+
     listComponents = installer.value('listComponents');
     if (listComponents && listComponents.length > 0) {
         LOG.log('listComponents=' + listComponents, LOG.DEBUG);
         settings.listComponents = true;
     }
 
-    // Allow selecting components from the preview repository
-    includePreview = installer.value('includePreview');
-    if (includePreview && includePreview.length > 0) {
-        LOG.log('Allowing Qt component selection from source Preview.', LOG.INFO);
-        settings.includePreview = true;
+    enableTelemetry = installer.value('enableTelementry');
+    if (enableTelemetry && enableTelemetry.length > 0) {
+        LOG.log('Telemetry will be enabled.', LOG.INFO);
+        settings.enableTelemetry = true;
     }
 
     // Handle any message boxes
@@ -175,31 +182,24 @@ Controller.prototype.CredentialsPageCallback = function() {
     // Handle credential errors
     page.loginErrorQtAccountChangeDetected.connect(function() {
         credentialError('loginErrorQtAccountChangeDetected');
-        return;
     });
     page.licenseDownloadError.connect(function() {
         credentialError('licenseDownloadError');
-        return;
     });
     page.allLicensesExpired.connect(function() {
         credentialError('allLicensesExpired');
-        return;
     });
     page.noValidLicenseForThisHost.connect(function() {
         credentialError('noValidLicenseForThisHost');
-        return;
     });
     page.emailNotVerified.connect(function() {
         credentialError('emailNotVerified');
-        return;
     });
     page.credentialsPageCompleted.connect(function() {
         credentialError('credentialsPageCompleted');
-        return;
     });
     page.licensemanagerError.connect(function() {
         credentialError('licensemanagerError');
-        return;
     });
 
     gui.clickButton(buttons.NextButton);
@@ -223,6 +223,22 @@ Controller.prototype.IntroductionPageCallback = function() {
     gui.clickButton(buttons.NextButton);
 
     LOG.log('Leaving introduction page.', LOG.DEBUG);
+};
+
+Controller.prototype.DynamicTelemetryPluginFormCallback = function() {
+    LOG.log('Reached telemetry page.', LOG.DEBUG);
+
+    var page = gui.pageWidgetByObjectName("DynamicTelemetryPluginForm");
+
+    if (settings.enableTelemetry) {
+        page.statisticGroupBox.enableStatisticRadioButton.setChecked(true);
+    } else {
+        page.statisticGroupBox.disableStatisticRadioButton.setChecked(true);
+    }
+
+    gui.clickButton(buttons.NextButton);
+
+    LOG.log('Leaving telemetry page.', LOG.DEBUG);
 };
 
 Controller.prototype.TargetDirectoryPageCallback = function() {
@@ -270,7 +286,7 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
             // Skip preview features
             if (checkBox.text === 'Preview' && !settings.includePreview) {
                 LOG.log('Disabling component source: Preview', LOG.INFO);
-                LOG.log('Pass include_preview=true to change this behavior.', LOG.INFO);
+                LOG.log('Pass includePreview=true to change this behavior.', LOG.INFO);
 
                 if (checkBox.checked) {
                     checkBox.click();
@@ -303,7 +319,7 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
         LOG.log('Could not find group box. All component sources may not be enabled.', LOG.WARN);
     }
 
-    // Create a dictionary of all the component names
+    // Create a dictionary of all the components so they can be looked up by name
     allComponentsList = installer.components();
     allComponents = {}
     for (var i = 0; i < allComponentsList.length; i++) {
@@ -392,7 +408,7 @@ Controller.prototype.ReadyForInstallationPageCallback = function() {
 
     bytes = installer.requiredDiskSpace();
     gigaBytes = bytes / 1024.0 / 1024.0 / 1024.0;
-    gigaBytes = Math.round(gigaBytes * 100) / 100.0
+    gigaBytes = Math.round(gigaBytes * 100) / 100.0 // Round to 2 decimals
     LOG.log('Changes will require ' + gigaBytes + ' GB of disk space.', LOG.WARN);
 
     gui.clickButton(buttons.NextButton);
