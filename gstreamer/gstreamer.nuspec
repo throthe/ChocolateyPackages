@@ -3,7 +3,7 @@
   <metadata>
     <id>gstreamer</id>
     <title>GStreamer</title>
-    <version>1.16.2</version>
+    <version>1.16.2.20200527</version>
     <authors>GStreamer Team</authors>
     <owners>John McKernan (jmcker)</owners>
     <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/master/gstreamer</packageSourceUrl>
@@ -26,6 +26,8 @@ Applications can take advantage of advances in codec and filter technology trans
 GStreamer is free and open-source software subject to the terms of the GNU Lesser General Public License (LGPL).
 
 Versioning is done in the `MAJOR.MINOR.MICRO` format with even `MINOR` numbers indicating stable releases, and odd `MINOR` numbers indicating unstable development releases [[source](https://gitlab.freedesktop.org/gstreamer/gst-docs/blob/master/markdown/frequently-asked-questions/developing.md#what-kind-of-versioning-scheme-does-gstreamer-use)].
+
+This package performs a "Complete" install and may contain restricted codecs or protocols with additional licensing restrictions or potential patent issues in some countries.
     </description>
 
     <dependencies></dependencies>
