@@ -6,7 +6,7 @@
     <version>1.18.1</version>
     <authors>GStreamer Team</authors>
     <owners>John McKernan (jmcker)</owners>
-    <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/master/gstreamer</packageSourceUrl>
+    <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/gstreamer</packageSourceUrl>
     <projectUrl>https://gstreamer.freedesktop.org/</projectUrl>
     <iconUrl>https://rawcdn.githack.com/jmcker/ChocolateyPackages/98fb4efbad601990e352cd555261bb825ffb35ae/icons/gstreamer.png</iconUrl>
     <bugTrackerUrl>https://gitlab.freedesktop.org/gstreamer/gstreamer/issues</bugTrackerUrl>
