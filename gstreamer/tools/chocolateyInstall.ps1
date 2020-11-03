@@ -9,8 +9,8 @@ $version        = "${major}.${minor}.${revision}"
 
 $packageName    = "${ENV:ChocolateyPackageName}"
 $packageTitle   = "${ENV:ChocolateyPackageTitle}"
-$url            = "https://gstreamer.freedesktop.org/data/pkg/windows/${version}/msvc/gstreamer-1.0-msvc-x86-${version}.msi"
-$url64          = "https://gstreamer.freedesktop.org/data/pkg/windows/${version}/msvc/gstreamer-1.0-msvc-x86_64-${version}.msi"
+$url            = "https://gstreamer.freedesktop.org/data/pkg/windows/${version}/gstreamer-1.0-msvc-x86-${version}.msi"
+$url64          = "https://gstreamer.freedesktop.org/data/pkg/windows/${version}/gstreamer-1.0-msvc-x86_64-${version}.msi"
 $silentArgs     = "ADDLOCAL=ALL /qn /norestart /l*v `"$(${ENV:TEMP})\$(${packageName}).$(${version}).MsiInstall.log`""
 
 $packageArgs = @{
@@ -21,9 +21,9 @@ $packageArgs = @{
   fileType        = "msi"
   silentArgs      = "${silentArgs}"
   validExitCodes  = @(0)
-  checksum        = "1EB3F35A799BDDAC561A252F0EDA763DD6546C04B2D6B0D6FE6D4803C15CEAD6"
+  checksum        = "72D0AC385C9AA09F6F9604F66E4B7FAE3CB7173B604DD3C2144E0568895BB5CA"
   checksumType    = "sha256"
-  checksum64      = "E766A67C254EFBC090B58DEC6B141832DF0BA8CAB1C56F9CB05BF5A4601758AC"
+  checksum64      = "B20C6E7A48ACF459120A7C62B9AD226D13FC9F5BBA49A3A2B7C67816BAABF9C4"
   checksumType64  = "sha256"
 }
 
