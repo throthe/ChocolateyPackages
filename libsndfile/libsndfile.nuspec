@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>libsndfile</id>
+    <title>libsndfile</title>
+    <version>1.0.30</version>
+    <authors>Erik de Castro Lopo</authors>
+    <owners>John McKernan (jmcker)</owners>
+    <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/libsndfile</packageSourceUrl>
+    <projectUrl>https://libsndfile.github.io/libsndfile/</projectUrl>
+    <!-- <iconUrl>https://rawcdn.githack.com/libsndfile/libsndfile/d03045b014c12ac0ea4187462d75edced1dfc0b3/docs/libsndfile.jpg</iconUrl> -->
+    <bugTrackerUrl>https://github.com/libsndfile/libsndfile/issues</bugTrackerUrl>
+    <mailingListUrl>https://libsndfile.github.io/libsndfile/lists.html</mailingListUrl>
+    <projectSourceUrl>https://github.com/libsndfile/libsndfile</projectSourceUrl>
+    <tags>audio sample io WAV AIFF FLAC Vorbis Opus</tags>
+    <licenseUrl>https://github.com/libsndfile/libsndfile/blob/master/COPYING</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>
+https://github.com/libsndfile/libsndfile/releases/tag/v1.0.30
+
+https://github.com/libsndfile/libsndfile/releases
+    </releaseNotes>
+
+    <summary>A cross-platform C library for reading and writing sampled audio files.</summary>
+    <description>
+libsndfile is a cross-platform C library for reading and writing sampled audio files. For a list of supported format see [this page](https://libsndfile.github.io/libsndfile/formats.html).
+    </description>
+
+    <dependencies></dependencies>
+
+  </metadata>
+  <files>
+    <file src="tools\*" target="tools" />
+  </files>
+</package>
