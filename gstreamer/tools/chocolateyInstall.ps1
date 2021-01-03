@@ -21,9 +21,9 @@ $packageArgs = @{
   fileType        = "msi"
   silentArgs      = "${silentArgs}"
   validExitCodes  = @(0)
-  checksum        = "2E8555CB0903A991D6961A87077D7E0D5C812EC1570C61E7DDF962358DE2E83D"
+  checksum        = "9f25a585703e990070ad2850dea2c4bfa76d3dbf3564173c0f16c0496f18b5ba"
   checksumType    = "sha256"
-  checksum64      = "3470E6EFECD88123A899DEC4457229E6F0CC74B749119688987B1C711F0F20F0"
+  checksum64      = "ca044a05b2ecb1cb7ed5628450d615d6f335ce7c5a4c39749336f891c4775cfa"
   checksumType64  = "sha256"
 }
 
