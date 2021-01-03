@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -o pipefail
 echo
 
 source ../common.sh
@@ -32,9 +33,9 @@ echo "x86 Download URL: ${download_url}"
 echo "x64 Download URL: ${download_url_64}"
 echo
 
-# Extract the checksums
-checksum=$(curl -s "${download_url}.sha256sum" | cut -d ' ' -f 1)
-checksum_64=$(curl -s "${download_url_64}.sha256sum" | cut -d ' ' -f 1)
+echo "Fetching checksums..."
+checksum=$(curl --fail --silent --show-error "${download_url}.sha256sum" | cut -d ' ' -f 1)
+checksum_64=$(curl --fail --silent --show-error "${download_url_64}.sha256sum" | cut -d ' ' -f 1)
 
 echo "x86 Checksum: ${checksum}"
 echo "x64 Checksum: ${checksum_64}"
