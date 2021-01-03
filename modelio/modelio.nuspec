@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>modelio</id>
+    <title>Modelio</title>
+    <version>4.1.0</version>
+    <authors>Modeliosoft</authors>
+    <owners>John McKernan (jmcker)</owners>
+    <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/modelio</packageSourceUrl>
+    <projectUrl>https://www.modelio.org/</projectUrl>
+    <iconUrl>https://rawcdn.githack.com/jmcker/ChocolateyPackages/1684724f659c8cf26e8618c8f43b8e13315dce97/icons/modelio.png</iconUrl>
+    <bugTrackerUrl>https://github.com/ModelioOpenSource/Modelio/issues</bugTrackerUrl>
+    <mailingListUrl>https://www.modelio.org/community/mailing-lists.html</mailingListUrl>
+    <projectSourceUrl>https://github.com/ModelioOpenSource/Modelio</projectSourceUrl>
+    <tags>modeling diagram architecture UML UML2 BPMN BPMN2 XMI MDA SysML TOGAF SoaML Java</tags>
+    <licenseUrl>https://github.com/ModelioOpenSource/Modelio/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>
+https://forge.modelio.org/projects/modelio3/wiki/Modelio_410
+
+https://forge.modelio.org/projects/modelio3/wiki/Version_History
+    </releaseNotes>
+
+    <summary>An open-source modeling environment.</summary>
+    <description>
+Modelio is an open-source modeling environment with support for various modeling language standards, including UML2, BPMN2, XMI, MDA, SysML, TOGAF, and SoaML [[source](https://www.modelio.org/about-modelio/features.html)].
+    </description>
+
+    <dependencies></dependencies>
+
+  </metadata>
+  <files>
+    <file src="tools\*" target="tools" />
+  </files>
+</package>
