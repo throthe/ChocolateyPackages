@@ -8,7 +8,6 @@
     <owners>John McKernan (jmcker)</owners>
     <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/libsndfile</packageSourceUrl>
     <projectUrl>https://libsndfile.github.io/libsndfile/</projectUrl>
-    <!-- <iconUrl>https://rawcdn.githack.com/libsndfile/libsndfile/d03045b014c12ac0ea4187462d75edced1dfc0b3/docs/libsndfile.jpg</iconUrl> -->
     <bugTrackerUrl>https://github.com/libsndfile/libsndfile/issues</bugTrackerUrl>
     <mailingListUrl>https://libsndfile.github.io/libsndfile/lists.html</mailingListUrl>
     <projectSourceUrl>https://github.com/libsndfile/libsndfile</projectSourceUrl>
