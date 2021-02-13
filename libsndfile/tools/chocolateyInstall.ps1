@@ -8,8 +8,8 @@ $revision       = ${versionSplit}[2]
 $version        = "${major}.${minor}.${revision}"
 
 $packageName    = "${ENV:ChocolateyPackageName}"
-$url            = "https://github.com/libsndfile/libsndfile/releases/download/v${version}/libsndfile-${version}-win32.zip"
-$url64          = "https://github.com/libsndfile/libsndfile/releases/download/v${version}/libsndfile-${version}-win64.zip"
+$url            = "https://github.com/libsndfile/libsndfile/releases/download/${version}/libsndfile-${version}-win32.zip"
+$url64          = "https://github.com/libsndfile/libsndfile/releases/download/${version}/libsndfile-${version}-win64.zip"
 
 # Choose between Program Files, Program Files (x86), and Local App Data
 if (Test-ProcessAdminRights) {
@@ -43,9 +43,9 @@ $packageArgs = @{
   unzipLocation   = "${tempPath}"
   url             = "${url}"
   url64           = "${url64}"
-  checksum        = "0BF21865E579C96EB9B78C2DD4A67E4CA74321E4FABD5E4AAB42208B7E78F03C"
+  checksum        = "94780DD14BD27AFD90FF81B3A7412237ACABB77255CAACB25D48ACA14D9B3FAC"
   checksumType    = "sha256"
-  checksum64      = "8FE7735547B59E22BBF56DEFEF53405EE5B1F2350BAD8ACEC6BBD358D1A181A0"
+  checksum64      = "704CB34148D61CB4EE6B5D9E32AE8CC56D8F9BE95D7DD164FB3866EF597F0228"
   checksumType64  = "sha256"
 }
 
