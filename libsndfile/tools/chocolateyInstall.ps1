@@ -22,16 +22,25 @@ else {
   $parentFolder = "${ENV:LOCALAPPDATA}"
 }
 
-$unzipLocation = Join-Path "${parentFolder}" ${packageName}
-Write-Output "Installing to ${unzipLocation}..."
+# Create temp directory to extract the Zip to
+# Create a unique directory name using a GUID and check it doesn't already
+# exist, if it does loop again with new GUID
+do {
+    $tempPath = Join-Path -Path "${env:TEMP}" -ChildPath ([GUID]::NewGuid()).ToString()
+}
+while (Test-Path ${tempPath})
+New-Item -Path ${tempPath} -ItemType Directory | Out-Null
 
-if (-Not (Test-Path "${unzipLocation}")) {
-  New-Item -ItemType directory -Path "${unzipLocation}" | Out-Null
+$installLocation = Join-Path "${parentFolder}" ${packageName}
+Write-Output "Installing to ${installLocation}..."
+
+if (-Not (Test-Path "${installLocation}")) {
+  New-Item -ItemType directory -Path "${installLocation}" | Out-Null
 }
 
 $packageArgs = @{
   packageName     = "${packageName}"
-  unzipLocation   = "${unzipLocation}"
+  unzipLocation   = "${tempPath}"
   url             = "${url}"
   url64           = "${url64}"
   checksum        = "0BF21865E579C96EB9B78C2DD4A67E4CA74321E4FABD5E4AAB42208B7E78F03C"
@@ -43,12 +52,12 @@ $packageArgs = @{
 Install-ChocolateyZipPackage @packageArgs
 
 # Zip should have an inner folder
-if (-Not (Test-Path "${unzipLocation}\bin")) {
-  $folder = Get-ChildItem "${unzipLocation}" -Directory
-  Get-ChildItem -Path ${folder}.FullName | Move-Item -Destination "${unzipLocation}"
-  Remove-Item ${folder}.FullName
+if (-Not (Test-Path "${tempPath}\bin")) {
+  $folder = Get-ChildItem "${tempPath}" -Directory
+  Get-ChildItem -Path ${folder}.FullName | Move-Item -Destination "${installLocation}"
+  Remove-Item ${tempPath} -Recurse -Force
 }
 
 Write-Output ""
 
-Install-ChocolateyPath -PathToInstall "${unzipLocation}\bin" -PathType Machine
+Install-ChocolateyPath -PathToInstall "${installLocation}\bin" -PathType Machine
