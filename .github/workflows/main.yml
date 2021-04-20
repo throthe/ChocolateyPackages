@@ -8,19 +8,20 @@ jobs:
     runs-on: windows-2016
   
     steps:
-    
-      # Examine the baseline
-      - name: Before
-        shell: powershell
-        run: |
-          ${ENV:Path}.Split(';');
-          whoami;
-          Get-ChildItem env:;
 
       # Install GStreamer
       - name: Install GStreamer
+        shell: powershell
         run: |
-          choco install gstreamer
+          choco install gstreamer;
+          Get-ChildItem env:;
+          ${ENV:Path}.Split(';');
+          refreshenv;
+          Get-ChildItem env:;
+          ${ENV:Path}.Split(';');
+          echo "${GITHUB_PATH}";
+          echo "${ENV:GSTREAMER_1_0_ROOT_MSVC_X86_64}\bin"
+          echo "${ENV:GSTREAMER_1_0_ROOT_MSVC_X86_64}\bin" >> "${ENV:GITHUB_PATH}"
 
       # Dump log 
       - name: Check path
@@ -28,6 +29,5 @@ jobs:
         run: |
           refreshenv;
           ${ENV:Path}.Split(';');
-          whoami;
           Get-ChildItem env:;
           Get-Content -Path C:\ProgramData\chocolatey\logs\chocolatey.log;
