@@ -14,20 +14,22 @@ jobs:
         shell: powershell
         run: |
           choco install gstreamer;
-          Get-ChildItem env:;
-          ${ENV:Path}.Split(';');
-          refreshenv;
+
+          # Setup and use the Chocolatey helpers
+          Import-Module "${ENV:ChocolateyInstall}\helpers\chocolateyProfile.psm1";
+          Update-SessionEnvironment;
+
           Get-ChildItem env:;
           ${ENV:Path}.Split(';');
           echo "${GITHUB_PATH}";
           echo "${ENV:GSTREAMER_1_0_ROOT_MSVC_X86_64}\bin"
           echo "${ENV:GSTREAMER_1_0_ROOT_MSVC_X86_64}\bin" >> "${ENV:GITHUB_PATH}"
 
-      # Dump log 
+      # Dump log
       - name: Check path
         shell: powershell
         run: |
           refreshenv;
           ${ENV:Path}.Split(';');
           Get-ChildItem env:;
-          Get-Content -Path C:\ProgramData\chocolatey\logs\chocolatey.log;
+          # Get-Content -Path C:\ProgramData\chocolatey\logs\chocolatey.log;
