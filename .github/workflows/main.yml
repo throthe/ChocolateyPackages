@@ -1,0 +1,32 @@
+name: GStreamer Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2016
+  
+    steps:
+    
+      # Examine the baseline
+      - name: Before
+        shell: powershell
+        run: |
+          ${ENV:Path}.Split(';');
+          whoami;
+          Get-ChildItem env;
+
+      # Install GStreamer
+      - name: Install GStreamer
+        run: |
+          choco install gstreamer
+
+      # Dump log 
+      - name: Check path
+        shell: powershell
+        run: |
+          refreshenv;
+          ${ENV:Path}.Split(';');
+          whoami;
+          Get-Content -Path C:\ProgramData\chocolatey\logs\chocolatey.log;
