@@ -64,30 +64,40 @@ function package-and-test() {
     echo
 
     # Assume choco is on WSL path as well
-    choco.exe pack
+    choco.exe pack "${package}.nuspec"
 
-    if choco.exe list --local-only | grep "${package}"; then
-        script="
-        choco install -y '${package}' --source . ;
-        "
-        echo "Existing install found. Testing upgrade..."
-    else
-        script="
-        choco install -y '${package}' --source . --x86 ;
-        choco uninstall -y '${package}' ;
-        choco install -y '${package}' --source . ;
-        choco uninstall -y '${package}' ;
-        "
-        echo "Testing x86 install, x86 uninstall, x64 install, x64 uninstall..."
-    fi
+    script="
+    choco install -y '${package}' --source . --x86 ;
+    pause ;
+    choco uninstall -y --removedependencies '${package}' ;
+    pause ;
+    choco install -y '${package}' --source . ;
+    pause ;
+    choco uninstall -y --removedependencies '${package}' ;
+    pause ;
+    "
+    echo "Testing x86 install, x86 uninstall, x64 install, x64 uninstall..."
 
     # Start an admin PowerShell to take care of the install
     powershell.exe -c "Start-Process powershell.exe -ArgumentList \"
     echo ${windows_dir} ;
     cd ${windows_dir} ;
     ${script}
-    pause ;
     \" -Verb RunAs"
+
+    read -p "Waiting for any key..."
+}
+
+function choco-push() {
+    package="${1}"
+    version="${2}"
+
+    if [ -z "${package}" ] || [ -z "${version}" ]; then
+        echo "Usage: ${FUNCNAME[0]} PACKAGE_NAME VERSION"
+        return 1
+    fi
+
+    choco.exe push -source https://push.chocolatey.org/ "${package}.${version}.nupkg"
 }
 
 function commit-and-push() {
@@ -107,8 +117,7 @@ function commit-and-push() {
     echo
 
     git commit -m "Release ${package} ${version}"
-
-    choco.exe push -source https://push.chocolatey.org/ "${package}.${version}.nupkg"
+    git push origin main
 }
 
 function calc-sha256() {

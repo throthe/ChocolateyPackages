@@ -21,24 +21,42 @@ old_dir="${PWD}"
 package="gstreamer"
 new_version="${1}"
 
-bump-nuspec-version "${package}" "${new_version}"
+packages=("gstreamer" "gstreamer-devel" "gstreamer-mingw" "gstreamer-mingw-devel")
 
-download_url=$(sed -nr 's|\$url[ ]+=[ ]+"([^"]*)"|\1|p' tools/chocolateyInstall.ps1)
-download_url_64=$(sed -nr 's|\$url64[ ]+=[ ]+"([^"]*)"|\1|p' tools/chocolateyInstall.ps1)
+for package in ${packages[@]}; do
 
-download_url=$(version="${new_version}" eval "echo ${download_url}")
-download_url_64=$(version="${new_version}" eval "echo ${download_url_64}")
+    bump-nuspec-version "${package}" "${new_version}"
 
-echo "x86 Download URL: ${download_url}"
-echo "x64 Download URL: ${download_url_64}"
-echo
+    download_url=$(sed -nr 's|\$url[ ]+=[ ]+"([^"]*)"|\1|p' tools/chocolateyInstall.ps1)
+    download_url_64=$(sed -nr 's|\$url64[ ]+=[ ]+"([^"]*)"|\1|p' tools/chocolateyInstall.ps1)
 
-echo "Fetching checksums..."
-checksum=$(curl --fail --silent --show-error "${download_url}.sha256sum" | cut -d ' ' -f 1)
-checksum_64=$(curl --fail --silent --show-error "${download_url_64}.sha256sum" | cut -d ' ' -f 1)
+    # This is pretty disgusting since it repeats chocolateyInstall.ps1, but it works for now
+    toolchain="msvc"
+    devel=""
+    first=$(echo "${package}" | awk '{split($0, a, "-"); print a[2]}')
+    second=$(echo "${package}" | awk '{split($0, a, "-"); print a[3]}')
 
-replace-checksums "${checksum}" "${checksum_64}"
+    [ "${first}" != "devel" ] && [ ! -z "${first}" ] && toolchain="${first}"
+    [ "${first}" == "devel" ] && devel="devel-"
+    [ "${second}" == "devel" ] && devel="devel-"
 
-package-and-test "${package}"
+    download_url=$(version="${new_version}" eval "echo ${download_url}")
+    download_url_64=$(version="${new_version}" eval "echo ${download_url_64}")
 
+    echo "x86 Download URL: ${download_url}"
+    echo "x64 Download URL: ${download_url_64}"
+    echo
+
+    echo "Fetching checksums..."
+    checksum=$(curl --fail --silent --show-error "${download_url}.sha256sum" | cut -d ' ' -f 1)
+    checksum_64=$(curl --fail --silent --show-error "${download_url_64}.sha256sum" | cut -d ' ' -f 1)
+
+    replace-checksums "${checksum}" "${checksum_64}"
+
+    package-and-test "${package}"
+
+    choco-push "${package}" "${new_version}"
+done
+
+replace-checksums "<insert package checksum>" "<insert package checksum>"
 commit-and-push "${package}" "${new_version}"
