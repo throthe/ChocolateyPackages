@@ -89,6 +89,7 @@ param(
 
   # Make change immediately available
   $paths = Parse-EnvPathList $env:PATH
+  $removeIndex = (IndexOf-EnvPath $paths $pathToUninstall)
   if ($removeIndex -ge 0) {
     $paths = [System.Collections.ArrayList] $paths
     $paths.RemoveAt($removeIndex)
