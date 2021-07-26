@@ -3,7 +3,7 @@
   <metadata>
     <id>gstreamer-mingw</id>
     <title>GStreamer MinGW</title>
-    <version>1.18.4</version>
+    <version>1.18.4.20210725</version>
     <authors>GStreamer Team</authors>
     <owners>John McKernan (jmcker)</owners>
     <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/gstreamer</packageSourceUrl>

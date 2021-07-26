@@ -3,7 +3,7 @@
   <metadata>
     <id>gstreamer-devel</id>
     <title>GStreamer (Development)</title>
-    <version>1.18.4</version>
+    <version>1.18.4.20210725</version>
     <authors>GStreamer Team</authors>
     <owners>John McKernan (jmcker)</owners>
     <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/gstreamer</packageSourceUrl>
@@ -31,7 +31,7 @@ This package performs a "Complete" install and may contain restricted codecs or 
     </description>
 
     <dependencies>
-      <dependency id="gstreamer" version="1.18.4" />
+      <dependency id="gstreamer" version="1.18.4.20210725" />
     </dependencies>
 
   </metadata>

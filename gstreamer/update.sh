@@ -20,6 +20,7 @@ fi
 old_dir="${PWD}"
 package="gstreamer"
 new_version="${1}"
+new_version_without_date="${new_version%.$(date +%Y)*}" # Ex: 1.1.1.20210725 -> 1.1.1
 
 packages=("gstreamer" "gstreamer-devel" "gstreamer-mingw" "gstreamer-mingw-devel")
 
@@ -40,8 +41,8 @@ for package in ${packages[@]}; do
     [ "${first}" == "devel" ] && devel="devel-"
     [ "${second}" == "devel" ] && devel="devel-"
 
-    download_url=$(version="${new_version}" eval "echo ${download_url}")
-    download_url_64=$(version="${new_version}" eval "echo ${download_url_64}")
+    download_url=$(version="${new_version_without_date}" eval "echo ${download_url}")
+    download_url_64=$(version="${new_version_without_date}" eval "echo ${download_url_64}")
 
     echo "x86 Download URL: ${download_url}"
     echo "x64 Download URL: ${download_url_64}"
