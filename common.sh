@@ -3,8 +3,8 @@
 function bump-nuspec-version() {
     package="${1}"
     new_version="${2}"
-    new_version_without_year="${new_version%.$(date +%Y)*}"
-    new_maj_min="${new_version_without_year%.*}"
+    new_version_without_date=$(echo "${new_version}" | sed -r 's|\.[0-9]{8}$||') # Strip the YYYYMMDD suffix if present
+    new_maj_min="${new_version_without_date%.*}"
 
     if [ -z "${package}" ] || [ -z "${new_version}" ]; then
         echo "Usage: ${FUNCNAME[0]} PACKAGE_NAME VERSION"
@@ -12,15 +12,15 @@ function bump-nuspec-version() {
     fi
 
     current_version=$(sed -nr 's|<version>(.+)</version>|\1|p' "${package}.nuspec" | xargs)
-    current_version_without_year="${current_version%.$(date +%Y)*}"
-    current_maj_min="${current_version%.*}"
+    current_version_without_date=$(echo "${current_version}" | sed -r 's|\.[0-9]{8}$||') # Strip the YYYYMMDD suffix if present
+    current_maj_min="${current_version_without_date%.*}"
 
     echo "Current package version: ${current_version}"
-    echo "Current version: ${current_version_without_year}"
+    echo "Current version: ${current_version_without_date}"
     echo "Major minor: ${current_maj_min}"
     echo
     echo "New version: ${new_version}"
-    echo "New version: ${new_version_without_year}"
+    echo "New version: ${new_version_without_date}"
     echo "Major minor: ${new_maj_min}"
     echo
 
@@ -36,7 +36,7 @@ function bump-nuspec-version() {
     # Replace the full version
     # Replace the major.minor version
     sed -r -i "s|${current_version}|${new_version}|g" "${package}.nuspec"
-    sed -r -i "s|${current_version_without_year}|${new_version_without_year}|g" "${package}.nuspec"
+    sed -r -i "s|${current_version_without_date}|${new_version_without_date}|g" "${package}.nuspec"
     sed -r -i "s|${current_maj_min}|${new_maj_min}|g" "${package}.nuspec"
 }
 
