@@ -60,4 +60,4 @@ for package in ${packages[@]}; do
 done
 
 replace-checksums "<insert package checksum>" "<insert package checksum>"
-commit-and-push "${package}" "${new_version}"
+commit-and-push "gstreamer" "${new_version}"
