@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = "Stop"
 
 $packageName = "${ENV:ChocolateyPackageName}"
 
@@ -8,7 +8,7 @@ $count = 0
 $foundPath = $false
 
 ForEach ($searchPath in $searchPaths) {
-  $testPath = Join-Path $(Join-Path "${searchPath}" "CloudFlare") ${packageName}
+  $testPath = Join-Path $(Join-Path "${searchPath}" "CloudFlare") "${packageName}"
 
   if (Test-Path "${testPath}") {
     if ($count -eq 0) {

@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop";
+$ErrorActionPreference = "Stop"
 
 # Strip package YYYYMMDD postfix if present
 $versionSplit   = ${ENV:ChocolateyPackageVersion}.Split(".")
@@ -34,7 +34,7 @@ else {
   $pathType = "User"
 }
 
-$installLocation = Join-Path $(Join-Path "${parentFolder}" "CloudFlare") ${packageName}
+$installLocation = Join-Path $(Join-Path "${parentFolder}" "CloudFlare") "${packageName}"
 
 Write-Output "Installing to ${installLocation}..."
 
