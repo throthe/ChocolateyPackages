@@ -22,40 +22,50 @@ else {
   $parentFolder = "${ENV:LOCALAPPDATA}"
 }
 
+$installLocation = Join-Path "${parentFolder}" ${packageName}
+
 # Create temp directory to extract the Zip to
 # Create a unique directory name using a GUID and check it doesn't already
 # exist, if it does loop again with new GUID
 do {
-    $tempPath = Join-Path -Path "${env:TEMP}" -ChildPath ([GUID]::NewGuid()).ToString()
+    $tempPath = Join-Path -Path "${ENV:TEMP}" -ChildPath ([GUID]::NewGuid()).ToString()
 }
 while (Test-Path ${tempPath})
 New-Item -Path ${tempPath} -ItemType Directory | Out-Null
-
-$installLocation = Join-Path "${parentFolder}" ${packageName}
-Write-Output "Installing to ${installLocation}..."
-
-if (-Not (Test-Path "${installLocation}")) {
-  New-Item -ItemType directory -Path "${installLocation}" | Out-Null
-}
 
 $packageArgs = @{
   packageName     = "${packageName}"
   unzipLocation   = "${tempPath}"
   url             = "${url}"
   url64           = "${url64}"
-  checksum        = "94780DD14BD27AFD90FF81B3A7412237ACABB77255CAACB25D48ACA14D9B3FAC"
+  checksum        = "F8846AA0923BE05A3DBFFF2AABD2F76DCC3A4249579FBD16CC2BD12C0F88F5D6"
   checksumType    = "sha256"
-  checksum64      = "704CB34148D61CB4EE6B5D9E32AE8CC56D8F9BE95D7DD164FB3866EF597F0228"
+  checksum64      = "B9DC71A36CE2A7F5816C0A30E7CFDAFC4B221F772153011B10C780230BDB95FB"
   checksumType64  = "sha256"
 }
 
 Install-ChocolateyZipPackage @packageArgs
 
-# Zip should have an inner folder
+Write-Output "Installing to ${installLocation}..."
+
+# Zip should have an inner folder but tolerate that changing
+$from = $null
 if (-Not (Test-Path "${tempPath}\bin")) {
-  $folder = Get-ChildItem "${tempPath}" -Directory
-  Get-ChildItem -Path ${folder}.FullName | Move-Item -Destination "${installLocation}"
-  Remove-Item ${tempPath} -Recurse -Force
+  $from = (Get-ChildItem "${tempPath}" -Directory).FullName
+} else {
+  $from = "${tempPath}"
+}
+
+# Remove old install
+if (Test-Path "${installLocation}") {
+  Remove-Item "${installLocation}" -Recurse -Force
+}
+
+Move-Item -Path "${from}" -Destination "${installLocation}"
+
+# Cleanup
+if (Test-Path "${tempPath}") {
+  Remove-Item "${tempPath}" -Recurse -Force
 }
 
 Write-Output ""
