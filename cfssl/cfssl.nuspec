@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>cfssl</id>
+    <title>Cloudflare PKI and TLS toolkit (CFSSL)</title>
+    <version>1.6.3</version>
+    <authors>CloudFlare Inc.</authors>
+    <owners>John McKernan (jmcker)</owners>
+    <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/cfssl</packageSourceUrl>
+    <projectUrl>https://github.com/cloudflare/cfssl</projectUrl>
+    <iconUrl>https://rawcdn.githack.com/jmcker/ChocolateyPackages/6ab8b14e87157ff6f39efb7d1a4f4518e0d8f5c0/icons/cloudflare.png</iconUrl>
+    <bugTrackerUrl>https://github.com/cloudflare/cfssl/issues</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/cloudflare/cfssl</projectSourceUrl>
+    <tags>PKI TLS</tags>
+    <licenseUrl>https://github.com/cloudflare/cfssl/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <releaseNotes>
+https://github.com/cloudflare/cfssl/releases/tag/v1.6.3
+
+https://github.com/cloudflare/cfssl/releases
+    </releaseNotes>
+
+    <summary>CloudFlare's PKI/TLS toolkit</summary>
+    <description>
+CFSSL is CloudFlare's PKI/TLS swiss army knife. It is both a command line
+tool and an HTTP API server for signing, verifying, and bundling TLS
+certificates.
+
+CFSSL consists of:
+
+* a set of packages useful for building custom TLS PKI tools
+* the `cfssl` program, which is the canonical command line utility
+    using the CFSSL packages.
+* the `multirootca` program, which is a certificate authority server
+    that can use multiple signing keys.
+* the `mkbundle` program is used to build certificate pool bundles.
+* the `cfssljson` program, which takes the JSON output from the
+    `cfssl` and `multirootca` programs and writes certificates, keys,
+    CSRs, and bundles to disk.
+    </description>
+
+    <dependencies></dependencies>
+
+  </metadata>
+  <files>
+    <file src="tools\*" target="tools" />
+  </files>
+</package>

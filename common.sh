@@ -52,8 +52,19 @@ function replace-checksums() {
     echo "x64 Checksum: ${checksum_64}"
     echo
 
-    sed -r -i "s|(checksum[ ]+=[ ]+)\"[^\"]*\"|\1\"${checksum}\"|" tools/chocolateyInstall.ps1
-    sed -r -i "s|(checksum64[ ]+=[ ]+)\"[^\"]*\"|\1\"${checksum_64}\"|" tools/chocolateyInstall.ps1
+    replace-checksum checksum "${checksum}"
+    replace-checksum checksum64 "${checksum_64}"
+}
+
+function replace-checksum() {
+    key="${1}"
+    checksum="${2}"
+
+    if [ -z "${key}" ] || [ -z "${checksum}" ]; then
+        echo "Usage: ${FUNCNAME[0]} KEY_NAME CHECKSUM"
+    fi
+
+    sed -r -i "s|(${key}[ ]+=[ ]+)\"[^\"]*\"|\1\"${checksum}\"|" tools/chocolateyInstall.ps1
 }
 
 function package-and-test() {
@@ -122,7 +133,8 @@ function commit-and-push() {
     echo
 
     git commit -m "Release ${package} ${version}"
-    git push origin main
+    git tag "${package}-${version}"
+    git push --tags origin main
 }
 
 function calc-sha256() {

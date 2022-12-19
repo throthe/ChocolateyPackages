@@ -14,12 +14,14 @@ $url64          = "https://github.com/libsndfile/libsndfile/releases/download/${
 # Choose between Program Files, Program Files (x86), and Local App Data
 if (Test-ProcessAdminRights) {
   $parentFolder = "${ENV:PROGRAMFILES}"
+  $pathType = "Machine"
   if (${ENV:OS_IS64BIT} -And ${ENV:ChocolateyForceX86}) {
     $parentFolder = "${ENV:PROGRAMFILES(x86)}"
   }
 }
 else {
   $parentFolder = "${ENV:LOCALAPPDATA}"
+  $pathType = "User"
 }
 
 $installLocation = Join-Path "${parentFolder}" ${packageName}
@@ -70,4 +72,4 @@ if (Test-Path "${tempPath}") {
 
 Write-Output ""
 
-Install-ChocolateyPath -PathToInstall "${installLocation}\bin" -PathType Machine
+Install-ChocolateyPath -PathToInstall "${installLocation}\bin" -PathType "${pathType}"
