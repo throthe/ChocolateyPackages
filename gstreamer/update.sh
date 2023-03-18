@@ -54,7 +54,7 @@ for package in ${packages[@]}; do
 
     replace-checksums "${checksum}" "${checksum_64}"
 
-    package-and-test "${package}"
+    package-and-test "${package}" "${new_version}"
 
     choco-push "${package}" "${new_version}"
 done

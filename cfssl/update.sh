@@ -41,7 +41,7 @@ for name in ${targets[@]}; do
     replace-checksum "\"${name}\"" "${checksum_64}"
 done
 
-package-and-test "${package}"
+package-and-test "${package}" "${new_version}"
 
 choco-push "${package}" "${new_version}"
 

@@ -69,6 +69,7 @@ function replace-checksum() {
 
 function package-and-test() {
     package="${1}"
+    version="${2}"
 
     if [ -z "${package}" ]; then
         echo "Usage: ${FUNCNAME[0]} PACKAGE_NAME"
@@ -83,11 +84,11 @@ function package-and-test() {
     choco.exe pack "${package}.nuspec"
 
     script="
-    choco install -y '${package}' --source . --x86 ;
+    choco install -y '${package}' --version '${version}' --source . --x86 ;
     pause ;
     choco uninstall -y --removedependencies '${package}' ;
     pause ;
-    choco install -y '${package}' --source . ;
+    choco install -y '${package}' --version '${version}' --source . ;
     pause ;
     choco uninstall -y --removedependencies '${package}' ;
     pause ;
