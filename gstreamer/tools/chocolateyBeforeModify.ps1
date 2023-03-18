@@ -16,7 +16,7 @@ if (${nameSplit}.Length -gt 1 -and ${nameSplit}[1] -ne "devel") {
 
 # ENV:ChocolateyForceX86 appears to never be set for uninstall
 # No --x86 flag exists on the command
-if (${ENV:OS_IS64BIT} -And -Not ${ENV:ChocolateyForceX86}) {
+if (${ENV:OS_IS64BIT} -Eq $true -And -Not (${ENV:ChocolateyForceX86} -Eq $true)) {
     $pathForUninstall = "%GSTREAMER_1_0_ROOT_$(${toolchain}.ToUpper())_X86_64%\bin"
 } else {
     $pathForUninstall = "%GSTREAMER_1_0_ROOT_$(${toolchain}.ToUpper())_X86%\bin"

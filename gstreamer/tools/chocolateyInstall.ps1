@@ -42,7 +42,7 @@ $packageArgs = @{
 
 Install-ChocolateyPackage @packageArgs
 
-if (${ENV:OS_IS64BIT} -And -Not ${ENV:ChocolateyForceX86}) {
+if (${ENV:OS_IS64BIT} -Eq $true -And -Not (${ENV:ChocolateyForceX86} -Eq $true)) {
   $locationVarName = "GSTREAMER_1_0_ROOT_$(${toolchain}.ToUpper())_X86_64"
 } else {
   $locationVarName = "GSTREAMER_1_0_ROOT_$(${toolchain}.ToUpper())_X86"

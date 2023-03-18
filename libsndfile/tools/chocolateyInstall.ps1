@@ -15,7 +15,7 @@ $url64          = "https://github.com/libsndfile/libsndfile/releases/download/${
 if (Test-ProcessAdminRights) {
   $parentFolder = "${ENV:PROGRAMFILES}"
   $pathType = "Machine"
-  if (${ENV:OS_IS64BIT} -And ${ENV:ChocolateyForceX86}) {
+  if (${ENV:OS_IS64BIT} -Eq $true -And -Not (${ENV:ChocolateyForceX86} -Eq $true)) {
     $parentFolder = "${ENV:PROGRAMFILES(x86)}"
   }
 }
