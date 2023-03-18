@@ -22,17 +22,17 @@ if (${ENV:OS_IS64BIT} -Eq $true -And -Not (${ENV:ChocolateyForceX86} -Eq $true))
     $pathForUninstall = "%GSTREAMER_1_0_ROOT_$(${toolchain}.ToUpper())_X86%\bin"
 }
 
-if (-not (Get-Command 'Uninstall-ChocolateyPath' -errorAction SilentlyContinue)) {
+if (-Not (Get-Command 'Uninstall-ChocolateyPath' -errorAction SilentlyContinue)) {
     Write-Output "Using Uninstall-ChocolateyPath-GH1663 function";
 
     $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
     $modulePath = Join-Path "${toolsDir}" 'Uninstall-ChocolateyPath-GH1663.ps1'
     Import-Module "${modulePath}"
 
-    Uninstall-ChocolateyPath-GH1663 "${pathForUninstall}" "User"
+    Uninstall-ChocolateyPath-GH1663 "${pathForUninstall}" "Machine"
 }
 else {
     Write-Debug "Using native Uninstall-ChocolateyPath function";
 
-    Uninstall-ChocolateyPath "${pathForUninstall}" "User"
+    Uninstall-ChocolateyPath "${pathForUninstall}" "Machine"
 }

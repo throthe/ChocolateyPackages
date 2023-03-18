@@ -41,6 +41,7 @@ $packageArgs = @{
 }
 
 Install-ChocolateyPackage @packageArgs
+Update-SessionEnvironment
 
 if (${ENV:OS_IS64BIT} -Eq $true -And -Not (${ENV:ChocolateyForceX86} -Eq $true)) {
   $locationVarName = "GSTREAMER_1_0_ROOT_$(${toolchain}.ToUpper())_X86_64"
@@ -48,7 +49,7 @@ if (${ENV:OS_IS64BIT} -Eq $true -And -Not (${ENV:ChocolateyForceX86} -Eq $true))
   $locationVarName = "GSTREAMER_1_0_ROOT_$(${toolchain}.ToUpper())_X86"
 }
 
-$installLocation = (Get-EnvironmentVariable -Name "${locationVarName}" -Scope "User")
+$installLocation = (Get-EnvironmentVariable -Name "${locationVarName}" -Scope "Machine")
 Write-Output ""
 Write-Output "GStreamer installed to ${installLocation}"
 Write-Output ""
@@ -59,8 +60,7 @@ $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $modulePath = Join-Path "${toolsDir}" 'Install-ChocolateyPath-GH1663.ps1'
 Import-Module "${modulePath}"
 
-# Must install to User path since we need to expand a User environment variable
-Install-ChocolateyPath-GH1663 -PathToInstall "%${locationVarName}%\bin" -PathType "User"
+Install-ChocolateyPath-GH1663 -PathToInstall "%${locationVarName}%\bin" -PathType "Machine"
 Update-SessionEnvironment
 
 $locationOnPath = (Get-Command gst-launch-1.0.exe -errorAction SilentlyContinue)
