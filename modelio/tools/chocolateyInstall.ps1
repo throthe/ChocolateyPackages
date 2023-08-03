@@ -9,7 +9,7 @@ $version        = "${major}.${minor}.${revision}"
 
 $packageName    = "${ENV:ChocolateyPackageName}"
 $packageTitle   = "${ENV:ChocolateyPackageTitle}"
-$url64          = "https://downloads.sourceforge.net/project/modeliouml/${version}/Modelio%20Open%20Source%20${version}%20-%2064.exe"
+$url64          = "https://github.com/ModelioOpenSource/Modelio/releases/download/v${version}/Windows.10.Modelio.Open.Source.${version}.-.64.exe"
 $silentArgs     = "/S /v /qn /norestart /l*v `"$(${ENV:TEMP})\$(${packageName}).$(${version}).Install.log`""
 
 $packageArgs = @{
@@ -19,7 +19,7 @@ $packageArgs = @{
   fileType        = "exe"
   silentArgs      = "${silentArgs}"
   validExitCodes  = @(0)
-  checksum64      = "45A6C867DDC677074685161F43D07297D7473EB2B27AFD5B50E4D5991CDD2163"
+  checksum64      = "C2B64A8A05884960568EB64F8A2EAEEB146C09B7B96FAA098B39C73EF1A7A258"
   checksumType64  = "sha256"
 }
 
