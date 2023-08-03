@@ -3,7 +3,7 @@
   <metadata>
     <id>modelio</id>
     <title>Modelio</title>
-    <version>5.1.0</version>
+    <version>5.3.1</version>
     <authors>Modeliosoft</authors>
     <owners>John McKernan (jmcker)</owners>
     <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/modelio</packageSourceUrl>
@@ -13,11 +13,11 @@
     <wikiUrl>https://github.com/ModelioOpenSource/Modelio/wiki</wikiUrl>
     <mailingListUrl>https://www.modelio.org/community/mailing-lists.html</mailingListUrl>
     <projectSourceUrl>https://github.com/ModelioOpenSource/Modelio</projectSourceUrl>
-    <tags>modeling diagram architecture UML UML2 BPMN BPMN2 XMI MDA SysML TOGAF SoaML Java</tags>
+    <tags>modeling diagram architecture UML UML2 BPMN BPMN2 XMI MDA SysML TOGAF SoaML ArchiMate Java</tags>
     <licenseUrl>https://github.com/ModelioOpenSource/Modelio/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>
-https://github.com/ModelioOpenSource/Modelio/releases/tag/v5.1.0
+https://github.com/ModelioOpenSource/Modelio/releases/tag/v5.3.1
 
 https://github.com/ModelioOpenSource/Modelio/releases
 
