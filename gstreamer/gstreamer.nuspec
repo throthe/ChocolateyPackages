@@ -3,7 +3,7 @@
   <metadata>
     <id>gstreamer</id>
     <title>GStreamer</title>
-    <version>1.22.2</version>
+    <version>1.22.5</version>
     <authors>GStreamer Team</authors>
     <owners>John McKernan (jmcker)</owners>
     <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/gstreamer</packageSourceUrl>
@@ -15,7 +15,7 @@
     <tags>audio video recording streaming codec</tags>
     <licenseUrl>https://gitlab.freedesktop.org/gstreamer/gstreamer/blob/master/COPYING</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <releaseNotes>https://gstreamer.freedesktop.org/releases/1.22/#1.22.2</releaseNotes>
+    <releaseNotes>https://gstreamer.freedesktop.org/releases/1.22/#1.22.5</releaseNotes>
 
     <summary>A pipeline-based multimedia framework for recording, streaming, and editing.</summary>
     <description>
