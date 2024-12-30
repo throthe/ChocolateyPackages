@@ -40,9 +40,9 @@ $packageArgs = @{
   unzipLocation   = "${tempPath}"
   url             = "${url}"
   url64           = "${url64}"
-  checksum        = "D242882588D0A2699CC193FB7E18B2A102B18634E0B1B220EE7B7E05A1B6739A"
+  checksum        = "<insert checksum>"
   checksumType    = "sha256"
-  checksum64      = "11155EE1949EA29F5091F2A5D954A3EAB1BFF93A866F49318688A00F2C20E704"
+  checksum64      = "<insert checksum>"
   checksumType64  = "sha256"
 }
 
