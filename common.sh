@@ -35,6 +35,7 @@ function bump-nuspec-version() {
 
     # Replace the full version
     # Replace the major.minor version
+    # TODO: This will replace the release note version with a version.YYYYMMDD if we're doing a Chocolatey-only release.
     sed -r -i "s|${current_version}|${new_version}|g" "${package}.nuspec"
     sed -r -i "s|${current_version_without_date}|${new_version_without_date}|g" "${package}.nuspec"
     sed -r -i "s|${current_maj_min}|${new_maj_min}|g" "${package}.nuspec"
@@ -85,12 +86,17 @@ function package-and-test() {
 
     script="
     choco install -y '${package}' --version '${version}' --source . --x86 ;
-    pause ;
+    echo '' ;
+    echo '' ;
     choco uninstall -y --removedependencies '${package}' ;
-    pause ;
+    echo '' ;
+    echo '' ;
     choco install -y '${package}' --version '${version}' --source . ;
-    pause ;
+    echo '' ;
+    echo '' ;
     choco uninstall -y --removedependencies '${package}' ;
+    echo '' ;
+    echo '' ;
     pause ;
     "
     echo "Testing x86 install, x86 uninstall, x64 install, x64 uninstall..."
