@@ -3,7 +3,7 @@
   <metadata>
     <id>libsndfile</id>
     <title>libsndfile</title>
-    <version>1.2.0.20241229</version>
+    <version>1.2.2</version>
     <authors>Erik de Castro Lopo</authors>
     <owners>John McKernan (jmcker)</owners>
     <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/libsndfile</packageSourceUrl>
@@ -15,7 +15,7 @@
     <licenseUrl>https://github.com/libsndfile/libsndfile/blob/master/COPYING</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>
-https://github.com/libsndfile/libsndfile/releases/tag/1.2.0
+https://github.com/libsndfile/libsndfile/releases/tag/1.2.2
 
 https://github.com/libsndfile/libsndfile/releases
     </releaseNotes>
