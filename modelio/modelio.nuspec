@@ -3,7 +3,7 @@
   <metadata>
     <id>modelio</id>
     <title>Modelio</title>
-    <version>5.3.1</version>
+    <version>5.4.1</version>
     <authors>Modeliosoft</authors>
     <owners>John McKernan (jmcker)</owners>
     <packageSourceUrl>https://github.com/jmcker/ChocolateyPackages/tree/main/modelio</packageSourceUrl>
@@ -17,7 +17,7 @@
     <licenseUrl>https://github.com/ModelioOpenSource/Modelio/blob/master/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <releaseNotes>
-https://github.com/ModelioOpenSource/Modelio/releases/tag/v5.3.1
+https://github.com/ModelioOpenSource/Modelio/releases/tag/v5.4.1
 
 https://github.com/ModelioOpenSource/Modelio/releases
 
